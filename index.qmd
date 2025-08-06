@@ -1,0 +1,17 @@
+---
+title: "Home"
+format: html
+---
+
+# 📊 Investment Analytics
+
+This project showcases a multi-asset portfolio risk and performance attribution analysis.
+
+Use the sidebar to explore:
+
+- 📉 Historical return analysis
+- 📈 Brinson-style performance attribution
+- 🧮 Scenario analysis (e.g., rate hikes on bonds)
+- 🧪 Monte Carlo Value-at-Risk simulation
+
+View full source on [GitHub](https://github.com/ruchimal3586/investment-analytics).
