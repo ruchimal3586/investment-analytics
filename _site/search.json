@@ -1,0 +1,79 @@
+[
+  {
+    "objectID": "01-risk-analysis.html",
+    "href": "01-risk-analysis.html",
+    "title": "Portfolio Risk Attribution",
+    "section": "",
+    "text": "title: \"Portfolio Risk Attribution & Scenario Analysis\"\nauthor: \"Ruchi Malhotra\"\ndate: \"2025-08-06\"\noutput:\n  html_document:\n    toc: true\n    toc_float: true\n    number_sections: true\n    theme: readable\n    highlight: tango\n    code_folding: hide"
+  },
+  {
+    "objectID": "01-risk-analysis.html#portfolio-returns-and-composition",
+    "href": "01-risk-analysis.html#portfolio-returns-and-composition",
+    "title": "Portfolio Risk Attribution",
+    "section": "📊 Portfolio Returns and Composition",
+    "text": "📊 Portfolio Returns and Composition\n\n\nCode\nknitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.2     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.0\n✔ ggplot2   3.4.2     ✔ tibble    3.2.1\n✔ lubridate 1.9.2     ✔ tidyr     1.3.0\n✔ purrr     1.0.1     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(PerformanceAnalytics)\n\n\nLoading required package: xts\nLoading required package: zoo\n\nAttaching package: 'zoo'\n\nThe following objects are masked from 'package:base':\n\n    as.Date, as.Date.numeric\n\n\n######################### Warning from 'xts' package ##########################\n#                                                                             #\n# The dplyr lag() function breaks how base R's lag() function is supposed to  #\n# work, which breaks lag(my_xts). Calls to lag(my_xts) that you type or       #\n# source() into this session won't work correctly.                            #\n#                                                                             #\n# Use stats::lag() to make sure you're not using dplyr::lag(), or you can add #\n# conflictRules('dplyr', exclude = 'lag') to your .Rprofile to stop           #\n# dplyr from breaking base R's lag() function.                                #\n#                                                                             #\n# Code in packages is not affected. It's protected by R's namespace mechanism #\n# Set `options(xts.warn_dplyr_breaks_lag = FALSE)` to suppress this warning.  #\n#                                                                             #\n###############################################################################\n\nAttaching package: 'xts'\n\nThe following objects are masked from 'package:dplyr':\n\n    first, last\n\n\nAttaching package: 'PerformanceAnalytics'\n\nThe following object is masked from 'package:graphics':\n\n    legend\n\n\nCode\nlibrary(quantmod)\n\n\nLoading required package: TTR\nRegistered S3 method overwritten by 'quantmod':\n  method            from\n  as.zoo.data.frame zoo \n\n\nCode\nlibrary(xts)\nlibrary(knitr)\nlibrary(corrr)\n\n\nWarning: package 'corrr' was built under R version 4.3.3\n\n\n\n\n[1] \"SPY\" \"TLT\" \"VNQ\"\n\n\n[1] \"AGG\""
+  },
+  {
+    "objectID": "01-risk-analysis.html#correlation-map",
+    "href": "01-risk-analysis.html#correlation-map",
+    "title": "Portfolio Risk Attribution",
+    "section": "🗺 Correlation Map",
+    "text": "🗺 Correlation Map"
+  },
+  {
+    "objectID": "01-risk-analysis.html#performance-summary",
+    "href": "01-risk-analysis.html#performance-summary",
+    "title": "Portfolio Risk Attribution",
+    "section": "📉 Performance Summary",
+    "text": "📉 Performance Summary"
+  },
+  {
+    "objectID": "01-risk-analysis.html#performance-comparison-table",
+    "href": "01-risk-analysis.html#performance-comparison-table",
+    "title": "Portfolio Risk Attribution",
+    "section": "🔍 Performance Comparison Table",
+    "text": "🔍 Performance Comparison Table\n\n\n                          Portfolio Benchmark\nAnnualized Return            0.0448    0.0628\nAnnualized Std Dev           0.1502    0.1149\nAnnualized Sharpe (Rf=0%)    0.2981    0.5461"
+  },
+  {
+    "objectID": "01-risk-analysis.html#drawdown-comparison",
+    "href": "01-risk-analysis.html#drawdown-comparison",
+    "title": "Portfolio Risk Attribution",
+    "section": "📉 Drawdown Comparison",
+    "text": "📉 Drawdown Comparison"
+  },
+  {
+    "objectID": "01-risk-analysis.html#distributional-view",
+    "href": "01-risk-analysis.html#distributional-view",
+    "title": "Portfolio Risk Attribution",
+    "section": "📦 Distributional View",
+    "text": "📦 Distributional View"
+  },
+  {
+    "objectID": "01-risk-analysis.html#brinson-style-risk-attribution-spyagg-benchmark",
+    "href": "01-risk-analysis.html#brinson-style-risk-attribution-spyagg-benchmark",
+    "title": "Portfolio Risk Attribution",
+    "section": "🧮 Brinson-Style Risk Attribution (SPY/AGG Benchmark)",
+    "text": "🧮 Brinson-Style Risk Attribution (SPY/AGG Benchmark)\n\n\n      SPY       TLT       VNQ \n 0.000528 -0.000204  0.000137 \n\n\n     SPY      TLT      VNQ \n0.000528 0.000019      NaN \n\n\n\nBrinson-Style Attribution: Portfolio vs SPY/AGG Benchmark\n\n\nAsset\nAllocation\nSelection\nTotal\n\n\n\n\nSPY\n0.000\n0.0000\n0.000\n\n\nTLT\n-0.001\n-0.0281\n-0.029\n\n\nVNQ\nNaN\nNaN\nNaN"
+  },
+  {
+    "objectID": "01-risk-analysis.html#scenario-analysis-rate-shock-simulation",
+    "href": "01-risk-analysis.html#scenario-analysis-rate-shock-simulation",
+    "title": "Portfolio Risk Attribution",
+    "section": "📈 Scenario Analysis: Rate Shock Simulation",
+    "text": "📈 Scenario Analysis: Rate Shock Simulation"
+  },
+  {
+    "objectID": "01-risk-analysis.html#monte-carlo-simulation-95-value-at-risk",
+    "href": "01-risk-analysis.html#monte-carlo-simulation-95-value-at-risk",
+    "title": "Portfolio Risk Attribution",
+    "section": "📊 Monte Carlo Simulation & 95% Value at Risk",
+    "text": "📊 Monte Carlo Simulation & 95% Value at Risk"
+  },
+  {
+    "objectID": "01-risk-analysis.html#summary",
+    "href": "01-risk-analysis.html#summary",
+    "title": "Portfolio Risk Attribution",
+    "section": "🔐 Summary",
+    "text": "🔐 Summary\nThis report demonstrates multi-asset portfolio analysis with risk attribution, scenario modeling, and Value at Risk simulation using real market data.\n\nPortfolio is a 3-asset blend of SPY (equity), TLT (bonds), and VNQ (REITs)\nBenchmark is a 50/50 SPY + AGG mix\nCompared performance, volatility, drawdowns, and 95% VaR\nBrinson attribution removed due to asset mismatch between portfolio and benchmark"
+  }
+]

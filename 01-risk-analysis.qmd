@@ -1,0 +1,208 @@
+
+```yaml
+title: "Portfolio Risk Attribution & Scenario Analysis"
+author: "Ruchi Malhotra"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    theme: readable
+    highlight: tango
+    code_folding: hide
+```
+
+## 📊 Portfolio Returns and Composition
+
+```{r setup, include: false, echo: false, warning: false, message: false}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(PerformanceAnalytics)
+library(quantmod)
+library(xts)
+library(knitr)
+library(corrr)
+```
+
+```{r load-prices, message=FALSE, warning=FALSE, echo=FALSE}
+
+# Portfolio assets: SPY, TLT, VNQ
+tickers <- c("SPY", "TLT", "VNQ")
+getSymbols(tickers, from = "2020-01-01", auto.assign = TRUE)
+prices <- do.call(merge, lapply(tickers, function(tk) Ad(get(tk))))
+colnames(prices) <- tickers
+returns <- na.omit(Return.calculate(prices, method = "log"))
+weights <- c(SPY = 0.5, TLT = 0.3, VNQ = 0.2)
+port_ret <- Return.portfolio(R = returns, weights = weights, rebalance_on = "quarters")
+
+# Benchmark: 50/50 SPY + AGG
+getSymbols("AGG", from = "2020-01-01", auto.assign = TRUE)
+prices_benchmark <- merge(Ad(SPY), Ad(AGG))
+colnames(prices_benchmark) <- c("SPY", "AGG")
+returns_benchmark <- na.omit(Return.calculate(prices_benchmark, method = "log"))
+benchmark_weights <- c(SPY = 0.5, AGG = 0.5)
+benchmark_ret <- Return.portfolio(R = returns_benchmark, weights = benchmark_weights, rebalance_on = "quarters")
+```
+
+## 🗺 Correlation Map
+
+```{r correlation-map, message=FALSE, warning=FALSE, echo=FALSE}
+returns_cor <- cor(returns)
+corrplot::corrplot(returns_cor, method = "circle", type = "upper", 
+                   addCoef.col = "black", tl.col = "black", tl.cex = 1.2)
+```
+
+## 📉 Performance Summary
+
+```{r perf-summary, message=FALSE, warning=FALSE, echo=FALSE}
+charts.PerformanceSummary(merge(port_ret, benchmark_ret),
+                          legend.loc = "bottomleft",
+                          main = "Portfolio vs 50/50 Benchmark (SPY/AGG)")
+```
+
+
+## 🔍 Performance Comparison Table
+
+```{r return-table}
+compare_ret <- merge(port_ret, benchmark_ret)
+colnames(compare_ret) <- c("Portfolio", "Benchmark")
+table.AnnualizedReturns(compare_ret)
+```
+
+## 📉 Drawdown Comparison
+
+```{r drawdown}
+chart.Drawdown(compare_ret, legend.loc = "bottomleft", main = "Drawdown: Portfolio vs Benchmark")
+```
+
+## 📦 Distributional View
+
+```{r histogram-boxplot}
+returns_df <- as.data.frame(returns)
+returns_df_long <- returns_df %>% pivot_longer(everything(), names_to = "Asset", values_to = "Return")
+
+ggplot(returns_df_long, aes(x = Return, fill = Asset)) +
+  geom_histogram(bins = 50, alpha = 0.6, position = "identity") +
+  facet_wrap(~Asset, scales = "free") +
+  theme_minimal() +
+  labs(title = "Distribution of Daily Returns by Asset")
+
+ggplot(returns_df_long, aes(x = Asset, y = Return, fill = Asset)) +
+  geom_boxplot(alpha = 0.7) +
+  theme_minimal() +
+  labs(title = "Boxplot of Daily Returns")
+```
+
+
+
+## 🧮 Brinson-Style Risk Attribution (SPY/AGG Benchmark)
+
+```{r attribution-corrected, message=FALSE, warning=FALSE, echo=FALSE}
+# Define benchmark weights aligned with SPY and AGG, zero for VNQ
+benchmark_weights <- c(SPY = 0.5, TLT = 0.5, VNQ = 0.0)
+
+# Create benchmark-matched returns: 
+benchmark_returns_matched <- merge(
+  returns$SPY,
+  returns_benchmark$AGG,  # use AGG instead of TLT for benchmark
+  returns$VNQ
+)
+colnames(benchmark_returns_matched) <- c("SPY", "TLT", "VNQ")
+
+# Set VNQ benchmark returns to NA (zero weight still applies)
+benchmark_returns_matched$VNQ <- NA
+
+# Compute average returns
+port_avg <- colMeans(returns)
+bench_avg <- colMeans(benchmark_returns_matched, na.rm = TRUE)
+
+print(round(port_avg, 6))
+print(round(bench_avg, 6))
+
+# Attribution effects
+allocation_effect <- (weights - benchmark_weights) * bench_avg
+selection_effect  <- (port_avg - bench_avg) * benchmark_weights
+total_effect      <- allocation_effect + selection_effect
+
+allocation_effect <- allocation_effect * 252
+selection_effect  <- selection_effect  * 252
+total_effect      <- total_effect      * 252
+
+# Output as table
+attribution_table <- tibble(
+  Asset = names(weights),
+  Allocation = round(allocation_effect, 4),
+  Selection = round(selection_effect, 4),
+  Total = round(total_effect, 4)
+)
+
+kable(attribution_table, caption = "Brinson-Style Attribution: Portfolio vs SPY/AGG Benchmark")
+```
+
+
+## 📈 Scenario Analysis: Rate Shock Simulation
+
+```{r scenario, message=FALSE, warning=FALSE, echo=FALSE}
+
+rate_hike_dates <- as.Date(c(
+  "2022-03-16",  # +25 bps
+  "2022-05-04",  # +50 bps
+  "2022-06-15",  # +75 bps
+  "2022-07-27",  # +75 bps
+  "2022-09-21",  # +75 bps
+  "2023-02-01",  # +25 bps
+  "2023-05-03"   # +25 bps
+))
+
+# Simulate a drawdown due to yield curve steepening
+returns_shocked <- returns
+tlt_shocks <- c(-0.02, -0.03, -0.04, -0.04, -0.04, -0.02, -0.02)
+
+for (i in seq_along(rate_hike_dates)) {
+  date <- rate_hike_dates[i]
+  returns_shocked[date, "TLT"] <- returns[date, "TLT"] + tlt_shocks[i]
+}
+
+port_ret_shocked <- Return.portfolio(returns_shocked, weights = weights)
+
+comparison <- merge(port_ret, port_ret_shocked)
+colnames(comparison) <- c("Baseline Portfolio", "Shocked Portfolio (Rate Hikes)")
+
+charts.PerformanceSummary(comparison,
+                          main = "Portfolio Impact of 2022–2023 Fed Rate Hikes (Shocks to TLT)",
+                          legend.loc = "bottomleft")
+
+```
+
+
+
+## 📊 Monte Carlo Simulation & 95% Value at Risk
+
+```{r monte-carlo-var, message=FALSE, warning=FALSE, echo=FALSE}
+set.seed(123)
+n_sim <- 10000
+mean_ret <- mean(port_ret)
+sd_ret <- sd(port_ret)
+
+sim_returns <- rnorm(n_sim, mean = mean_ret, sd = sd_ret)
+VaR_95 <- quantile(sim_returns, 0.05)
+
+hist(sim_returns, breaks = 50, col = "lightblue", 
+     main = "Monte Carlo Simulated Returns",
+     xlab = "Simulated Daily Return")
+
+abline(v = VaR_95, col = "red", lwd = 2)
+legend("topright", legend = paste("VaR 95%:", round(VaR_95, 4)), col = "red", lwd = 2)
+```
+
+## 🔐 Summary
+
+This report demonstrates multi-asset portfolio analysis with risk attribution, scenario modeling, and Value at Risk simulation using real market data.
+
+- Portfolio is a 3-asset blend of SPY (equity), TLT (bonds), and VNQ (REITs)
+- Benchmark is a 50/50 SPY + AGG mix
+- Compared performance, volatility, drawdowns, and 95% VaR
+- Brinson attribution removed due to asset mismatch between portfolio and benchmark
+
+
