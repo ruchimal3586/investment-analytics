@@ -1,0 +1,10 @@
+pandas
+numpy
+statsmodels
+matplotlib
+seaborn
+fredapi
+scikit-learn
+jupyter
+python-dotenv
+
