@@ -48,83 +48,81 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="macro-credit-stress-simulation-engine" class="level1">
-<h1>Macro-Credit Stress Simulation Engine</h1>
+<section id="macro-credit-stress-simulation-engine" class="level2">
+<h2 class="anchored" data-anchor-id="macro-credit-stress-simulation-engine">💳 Macro-Credit Stress Simulation Engine</h2>
 <p>This module implements a simulation framework to translate macroeconomic shocks<br>
 (e.g., GDP declines, inflation spikes) into credit portfolio risk metrics<br>
-such as Probability of Default (PD), Loss Given Default (LGD), and Expected Credit Loss (ECL).</p>
-<p>It is designed as a <strong>learning and prototyping environment</strong> for CCAR/IFRS9-style stress testing,<br>
-where macroeconomic scenarios are propagated into loan portfolio losses.</p>
+such as <strong>Probability of Default (PD)</strong>, <strong>Loss Given Default (LGD)</strong>, and <strong>Expected Credit Loss (ECL)</strong>.</p>
+<p>It is designed as a <strong>learning and prototyping environment</strong> for CCAR / IFRS-9 style stress testing,<br>
+where macroeconomic scenarios are propagated through econometric models into loan portfolio losses.</p>
 <hr>
+</section>
 <section id="features" class="level2">
 <h2 class="anchored" data-anchor-id="features">✨ Features</h2>
+<section id="econometric-foundations" class="level3">
+<h3 class="anchored" data-anchor-id="econometric-foundations"><strong>Econometric Foundations</strong></h3>
 <ul>
-<li><strong>Econometric foundations</strong>
+<li>Fetch GDP and CPI data from FRED API<br>
+</li>
+<li>Perform <strong>stationarity checks (ADF tests)</strong><br>
+</li>
+<li>Run <strong>Johansen cointegration tests</strong> to detect long-run equilibrium<br>
+</li>
+<li>Estimate <strong>VECM / VAR models</strong> and generate <strong>Impulse Response Functions (IRFs)</strong></li>
+</ul>
+</section>
+<section id="scenario-design" class="level3">
+<h3 class="anchored" data-anchor-id="scenario-design"><strong>Scenario Design</strong></h3>
 <ul>
-<li>Fetch GDP and CPI data from FRED via API<br>
+<li>Build <strong>inflation</strong>, <strong>recession</strong>, and <strong>stagflation</strong> macro paths from IRFs<br>
 </li>
-<li>Stationarity checks (ADF tests)<br>
+<li>Overlay regulator-style stress magnitudes (scaling IRFs to simulate shocks)<br>
 </li>
-<li>Johansen cointegration tests<br>
-</li>
-<li>Estimate VECM/VAR models and generate Impulse Response Functions (IRFs)</li>
-</ul></li>
-<li><strong>Scenario design</strong>
+<li>Decompose variance via <strong>Forecast Error Variance Decomposition (FEVD)</strong></li>
+</ul>
+</section>
+<section id="credit-risk-mapping" class="level3">
+<h3 class="anchored" data-anchor-id="credit-risk-mapping"><strong>Credit Risk Mapping</strong></h3>
 <ul>
-<li>Inflation, recession, and stagflation paths via IRFs<br>
+<li>Stylized loan portfolio with segments: <strong>Retail</strong>, <strong>SME</strong>, <strong>Corporate</strong><br>
 </li>
-<li>Overlay IRFs with regulator-style stress magnitudes<br>
+<li>Apply segment-specific <strong>elasticities</strong> to map macro shocks into PD changes<br>
 </li>
-<li>Forecast error variance decomposition (FEVD) to attribute variance to shocks</li>
-</ul></li>
-<li><strong>Credit risk mapping</strong>
+<li>Impose PD floors / caps for realism<br>
+</li>
+<li>Compute <strong>stressed ECLs</strong> across 12-quarter horizons</li>
+</ul>
+</section>
+<section id="visualization" class="level3">
+<h3 class="anchored" data-anchor-id="visualization"><strong>Visualization</strong></h3>
 <ul>
-<li>Stylized loan portfolio with segments: Retail, SME, Corporate<br>
+<li>Plot dynamic <strong>ECL paths</strong> for multiple scenarios<br>
 </li>
-<li>PD multipliers calibrated via elasticities per segment<br>
-</li>
-<li>Apply PD floors/caps for realism<br>
-</li>
-<li>Compute stressed ECLs across scenarios and quarters</li>
-</ul></li>
-<li><strong>Visualization</strong>
-<ul>
-<li>Plot dynamic ECL paths under multiple scenarios<br>
-</li>
-<li>Compare inflation-driven, recession-driven, and combined stagflation outcomes</li>
-</ul></li>
+<li>Compare <strong>inflation-driven</strong>, <strong>recession-driven</strong>, and <strong>stagflation</strong> responses</li>
 </ul>
 <hr>
+</section>
 </section>
 <section id="folder-structure" class="level2">
 <h2 class="anchored" data-anchor-id="folder-structure">📂 Folder Structure</h2>
-<p>macro-credit-sim/ ├── notebooks/ # Jupyter notebooks (interactive workflows) │ └── macro-vecm-demo.ipynb ├── src/ # Python modules (reusable functions) ├── data/ # Input datasets (ignored by Git) ├── requirements.txt # Python dependencies └── README.md # Project documentation</p>
-</section>
-<section id="reports" class="level2">
-<h2 class="anchored" data-anchor-id="reports">Reports</h2>
+<p>```text macro-credit-sim/ ├── notebooks/ # Jupyter notebooks (interactive workflows) │ └── macro-vecm-demo.ipynb ├── src/ # Python modules (reusable functions) ├── data/ # Input datasets (gitignored) ├── requirements.txt # Python dependencies └── README.md # Project documentation</p>
+<p>📊 Reports</p>
 <ul>
-<li><a href="https://ruchimal3586.github.io/investment-analytics/macro-vecm-demo.html">Macro Credit Stress Simulation (VECM Demo)</a></li>
+<li><p>Interactive Report (IRFs + ECL paths) 👉 Macro Credit Stress Simulation (VECM Demo)</p></li>
+<li><p>Notebook (Code &amp; Analysis) 📘 View macro-vecm-demo.ipynb on GitHub</p></li>
+<li><p>Back to Main Page: 🏠 investment-analytics home</p></li>
 </ul>
-</section>
-<section id="interpretation" class="level2">
-<h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
-</section>
-</section>
-<section id="irfs-impulse-response-functions" class="level1">
-<h1>IRFs (Impulse Response Functions)</h1>
-<p>GDP shock → CPI: shows how inflation responds to growth shocks. In this model, a negative GDP shock dampens CPI in the short run, but fades after a few quarters.</p>
-<p>CPI shock → GDP: shows inflation erodes growth gradually, producing a slower adjustment.</p>
-</section>
-<section id="ecl-paths" class="level1">
-<h1>ECL paths</h1>
-<p>Inflation scenario: ECL rises steadily (slow-burn). Corporates dominate dollar losses, SMEs most sensitive proportionally.</p>
-<p>Recession scenario: ECL spikes early but fades (mean reversion of GDP).</p>
-<p>Stagflation: blended effect, moderate and persistent.</p>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps">Next Steps</h2>
-<p>Extend to multi-factor VARs (e.g., add interest rates, unemployment).</p>
-<p>Compare statistical scenario overlays with dummy-driven event simulations (as in the two-layer resilience simulator).</p>
-</section>
+<p>📈 Interpretation Highlights Impulse Response Functions (IRFs)</p>
+<ul>
+<li><p>GDP → CPI: A negative GDP shock dampens inflation temporarily, but the effect fades after several quarters.</p></li>
+<li><p>CPI → GDP: Inflation shocks reduce output growth over time, showing a gradual adjustment path. This aligns with macro intuition — inflation shocks slow real activity, while growth boosts CPI.</p></li>
+</ul>
+<p>ECL Paths | Scenario | Pattern | Portfolio Implication | | ————— | —————————————- | ———————————————————— | | <strong>Inflation</strong> | Slow and persistent rise | Corporate losses dominate; SME proportionally most sensitive | | <strong>Recession</strong> | Sharp initial spike, then mean reversion | GDP recovery tempers ECL after initial quarters | | <strong>Stagflation</strong> | Blend of both, moderate but persistent | Dual impact on PDs and LGDs |</p>
+<p>🔮 Next Steps</p>
+<ul>
+<li><p>Extend to multi-factor VARs (e.g., add interest rates, unemployment).</p></li>
+<li><p>Compare statistical scenario overlays with event-driven simulations (as in a two-layer resilience simulator combining macro + idiosyncratic shocks).</p></li>
+</ul>
 </section>
 
 </main>
