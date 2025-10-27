@@ -14,8 +14,8 @@ where macroeconomic scenarios are propagated through econometric models into loa
 ### **Econometric Foundations**
 - Fetch GDP and CPI data from FRED API  
 - Perform **stationarity checks (ADF tests)**  
-- Run **Johansen cointegration tests** to detect long-run equilibrium  
-- Estimate **VECM / VAR models** and generate **Impulse Response Functions (IRFs)**  
+- Run **Johansen cointegration tests** to detect long-run equilibrium. No cointegration was found so using VAR on growth to assess short-run dynamics  
+- Estimate **VAR models** and generate **Impulse Response Functions (IRFs)**  
 
 ### **Scenario Design**
 - Build **inflation**, **recession**, and **stagflation** macro paths from IRFs  
