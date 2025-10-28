@@ -7622,7 +7622,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr" tabindex="0">
-<pre>/tmp/ipykernel_12802/590940557.py:3: FutureWarning: 'Q-DEC' is deprecated and will be removed in a future version, please use 'QE-DEC' instead.
+<pre>/tmp/ipykernel_22503/590940557.py:3: FutureWarning: 'Q-DEC' is deprecated and will be removed in a future version, please use 'QE-DEC' instead.
   cpi_q = cpi.resample("Q-DEC").last()
 </pre>
 </div>
@@ -7795,7 +7795,7 @@ Selected VAR lag on diffs (AIC): 3
 Model:                         VAR
 Method:                        OLS
 Date:           Tue, 28, Oct, 2025
-Time:                     13:42:12
+Time:                     14:04:58
 --------------------------------------------------------------------
 No. of Equations:         2.00000    BIC:                   -18.9739
 Nobs:                     310.000    HQIC:                  -19.0752
@@ -8635,26 +8635,46 @@ None
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Interpretations:-IRFs-and-FEVDs">Interpretations: IRFs and FEVDs<a class="anchor-link" href="#Interpretations:-IRFs-and-FEVDs">¶</a></h2><p>The impulse responses and variance decompositions together characterize the macro transmission mechanics underlying this VAR(4) model.
-Positive GDP shocks are persistent but gradually mean-reverting, consistent with cyclical momentum that dissipates over time.</p>
+<h2 id="Interpretations:-IRFs-and-FEVDs">Interpretations: IRFs and FEVDs<a class="anchor-link" href="#Interpretations:-IRFs-and-FEVDs">¶</a></h2><p>These impulse responses and variance decompositions characterize short-term macro adjustment dynamics once growth rates are modeled explicitly.</p>
 <ul>
-<li><p>GDP → CPI: Growth shocks raise inflation steadily for several quarters — an expansionary phase consistent with demand-driven inflation.</p>
+<li><p>GDP → CPI</p>
+<ul>
+<li><p>A positive GDP growth shock lifts inflation growth briefly (peaking around Q2–Q3), consistent with near-term demand pressure.</p>
 </li>
-<li><p>CPI → GDP: Inflation shocks exert a short-run drag on growth, fading by about the sixth quarter as monetary and real adjustments restore equilibrium.</p>
-</li>
-<li><p>CPI → CPI: Inflation inertia remains strong, though the effect plateaus beyond 8–10 quarters.</p>
+<li><p>The effect quickly moderates after 3–4 quarters — the economy cools as output returns to trend, so inflation reverts to baseline.</p>
 </li>
 </ul>
-<p>From the FEVD analysis, GDP’s uncertainty is primarily self-explained, while CPI’s variance shows moderate dependence on GDP shocks, confirming limited but meaningful spillovers from real activity to price dynamics.
-For scenario design, this implies:</p>
+</li>
+<li><p>CPI → GDP</p>
 <ul>
-<li><p>Inflation scenarios should propagate slowly and persist over several quarters.</p>
+<li><p>An inflation shock immediately dampens GDP growth, visible as a negative impulse in the first 1–2 quarters — a sign of short-term real drag as higher prices tighten conditions.</p>
 </li>
-<li><p>Recession scenarios should exhibit sharper but shorter-lived GDP adjustments.</p>
-</li>
-<li><p>Stagflation scenarios can be built by combining these responses — prolonged inflation pressure coexisting with transitory growth weakness.</p>
+<li><p>Growth normalizes within about a year, showing rapid policy and market adjustment.</p>
 </li>
 </ul>
+</li>
+<li><p>CPI → CPI</p>
+<ul>
+<li>Inflation shocks are self-reinforcing for a few quarters (autocorrelation in price growth), then taper off. The smaller confidence bands reflect low volatility in the recent CPI growth process.</li>
+</ul>
+</li>
+<li><p>GDP → GDP</p>
+<ul>
+<li>GDP growth shocks are mostly self-driven but decay sharply, typical of stationary growth cycles rather than trending expansions.</li>
+</ul>
+</li>
+<li><p>FEVDs</p>
+<pre><code>  GDP variance is nearly all self-explained: real activity shocks dominate output fluctuations.
+
+  CPI variance is mostly inflation-driven but with a small (~5-10%) share due to GDP shocks — confirming that real demand still matters, though weakly.
+
+  From the FEVD analysis, GDP’s uncertainty is primarily self-explained, while CPI’s variance shows moderate dependence on GDP shocks, confirming limited but meaningful spillovers from real activity to price dynamics.</code></pre>
+</li>
+</ul>
+<p>+For scenario design, this implies:
+Inflation scenarios should propagate slowly and persist over several quarters.
+Recession scenarios should exhibit sharper but shorter-lived GDP adjustments.
+Stagflation scenarios can be built by combining these responses — prolonged inflation pressure coexisting with transitory growth weakness.</p>
 </div>
 </div>
 </div>
