@@ -39,7 +39,7 @@ where macroeconomic scenarios are propagated through econometric models into loa
 ```text
 macro-credit-sim/
 ├── notebooks/             # Jupyter notebooks (interactive workflows)
-│   └── macro-vecm-demo.ipynb
+│   └── macro-stresstest-demo.ipynb
 ├── src/                   # Python modules (reusable functions)
 ├── data/                  # Input datasets (gitignored)
 ├── requirements.txt        # Python dependencies
@@ -49,10 +49,10 @@ macro-credit-sim/
 📊 Reports
 
 + Interactive Report (IRFs + ECL paths)
-👉 Macro Credit Stress Simulation (VECM Demo)
+👉 Macro Credit Stress Simulation (VAR Demo)
 
 + Notebook (Code & Analysis)
-📘 View macro-vecm-demo.ipynb on GitHub
+📘 View macro-stresstest-demo.ipynb on GitHub
 
 + Back to Main Page:
 🏠 investment-analytics home
